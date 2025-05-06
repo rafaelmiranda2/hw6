@@ -95,5 +95,53 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
 //add your solution here!
+	/*if (dict.find(word) != dict.end()) { //Base case: determine if word exists in the dictionary
+		if (prefix.find(word) != prefix.end()) { //If it's a prefix, keep on going
+			if(board[r + dr][c + dc] != NULL) {
+				if (dict.find(word + board[r + dr][c + dc]) != dict.end()) {
+					return boggleHelper(dict, prefix, board, word, result, r, c, dr, dc);
+				}
+			}
+		}
+		else {
+			result.insert(word);
+			return true;
+		}
+	}
 
+	if (word == "") { //If word is nothing, initialize it.
+		word = board[r][c];
+	}
+	else if(board[r + dr][c + dc] != NULL) { //Else if haven't reached the end of the row or column, keep on going
+		word += board[r + dr][c + dc];
+	}
+	else { //Assume we reached the end of the board
+		return false;
+	}
+	if (dr == 1 && dc == 0 && board[r + dr][c + dc] != NULL) { //If we're checking horizontal, keep on going horizontally
+		boggleHelper(dict, prefix, board, word, result, r, c, dr + 1, dc);
+	}
+	else if (dr == 0 && dc == 1 && board[r + dr][c + dc] != NULL) { //If we're checking vertical, keep on going vertical
+		boggleHelper(dict, prefix, board, word, result, r, c, dr, dc + 1);
+	}
+	else if (dr == 1 && dc == 1 && board[r + dr][c + dc] != NULL) { //If we're checking diagonally, keep on going diagonally
+		boggleHelper(dict, prefix, board, word, result, r, c, dr + 1, dc + 1);
+	}*/
+	if (r >= board.size() || c >= board.size()) { //Prevent out of bounds
+		return false;
+	}
+	std::string currLongest = "";
+	word += board[r][c]; //Append letter to word
+	if (prefix.find(word) == prefix.end() && dict.find(word) == dict.end()) { //If word isn't found anywhere, give up, go back
+		return false;
+	}
+	bool foundLongest = boggleHelper(dict, prefix, board, word, result, r + dr, c + dc, dr, dc); //Determines if a longer word exists
+	if (foundLongest == true) { 
+		return true;
+	}
+	if (dict.find(word) != dict.end()) { //If a word is found
+		result.insert(word);
+		return true;
+	}
+	return false; //exit if nothing is found
 }
